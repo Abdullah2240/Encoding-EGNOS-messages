@@ -27,7 +27,7 @@ def serve_frontend(path: str):
 
 @app.route('/api/numbers', methods=['POST'])
 def process_numbers():
-    print("HELLO")
+
     data = request.get_json()
     if 'numbers' not in data:
         return jsonify({'error': 'No numbers provided'}), 400
@@ -44,7 +44,6 @@ def process_numbers():
     if any(num < 1 or num > 210 for num in numbers):
         return jsonify({'error': 'Numbers must be between 1 and 210.'}), 400
 
-    print(f"Received numbers: {numbers}")
 
     # Here you can add any processing logic for the numbers 
     

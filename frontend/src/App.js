@@ -24,7 +24,8 @@ function App() {
             });
 
             if (!res.ok) {
-                throw new Error('Failed to fetch data from backend');
+                const errorData = await res.json();
+                throw new Error(errorData["error"]);
             }
 
             const data = await res.json();
@@ -38,13 +39,15 @@ function App() {
             setHexString(data.hex_string);
             setReceivedPRNs(data.received_PRNs);
 
-            // Optionally, set some success message or additional feedback
+            // Clear any existing error
             setError('');
-        } catch (error) {
+        } 
+        catch (error) {
             console.error('Error:', error);
             setError('Error: ' + error.message);
         }
     };
+
 
     return (
         <div className="container d-flex justify-content-center align-items-center min-vh-100">
