@@ -28,14 +28,9 @@ function App() {
             });
 
             if (!res.ok) {
-<<<<<<< HEAD
                 // Extract the error response from the body and throw it
                 const errorData = await res.json();
                 throw new Error(errorData.message || 'Something went wrong');
-=======
-                const errorData = await res.json();
-                throw new Error(errorData["error"]);
->>>>>>> 3795178bca45dbf9541ad0d597fa8ae4889c2f8f
             }
 
             const data = await res.json();
