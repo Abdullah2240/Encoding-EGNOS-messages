@@ -47,12 +47,7 @@ def binary_to_hex(binary_string):
     """
 
     # Step 2: Use Python's built-in conversion for efficiency
-    print(hex(int(binary_string, 2)))
-    hex_string = hex(int(binary_string, 2)).upper()
+    print( hex(int(( binary_string), 2)))
+    hex_string = hex(int(binary_string, 2))[2:].upper()
     
-
-    # Ensure hex string length is even (pad with leading zero if necessary)
-    if len(hex_string) % 2 != 0:
-        hex_string = '0' + hex_string
-
     return hex_string

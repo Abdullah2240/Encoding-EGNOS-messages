@@ -35,14 +35,20 @@ def process_numbers():
     numbers_str = data['numbers']
     try:
         numbers = list(map(int, numbers_str.split(',')))
-    except ValueError:
-        return jsonify({'error': 'Invalid input. Please provide a comma-separated list of numbers.'}), 400
+    except ValueError as e:
+        return jsonify({
+            "error": "ValueError",
+            "message": str(e)
+        }), 400 
 
     if len(numbers) > 51:
-        return jsonify({'error': 'Too many numbers. Please provide a maximum of 51 numbers.'}), 400
+        return jsonify({
+            "error": "TooMuchDataError",
+            "message": "Too many numbers provided. Maximum is 51."
+        }), 400 
 
     if any(num < 1 or num > 210 for num in numbers):
-        return jsonify({'error': 'Numbers must be between 1 and 210.'}), 400
+        return (jsonify({'error': 'Numbers must be between 1 and 210.'}), 400)
 
     print(f"Received numbers: {numbers}")
 
@@ -52,9 +58,10 @@ def process_numbers():
     # Main program (add OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOP)
     preamble = "10001011"
     message_type1 = "000001"
-    data = [0] * 212
+    data = [0] * 210
+    iodp = "00" # we can ch
 
-    PRN_list = numbers
+    PRN_list = numbers # input from user
 
     #VALIDATE USER INPUT
     for d in PRN_list:
@@ -66,11 +73,9 @@ def process_numbers():
             data[idx] = 1
         else:
             raise ValueError(f"Warning: PRN {idx} is out of range (0-209)")
-        
-
 
     # Build final message string
-    non_coded_message = preamble + message_type1 + ''.join(str(b) for b in data)
+    non_coded_message = preamble + message_type1 + ''.join(str(b) for b in data) + iodp
 
     print("Non BCH coded message:")
     print(non_coded_message, "\n")
@@ -87,13 +92,6 @@ def process_numbers():
     # hex string of length 63
     hex_string = binary_to_hex(bit_string + "00")
     print("Hex String:    ", hex_string, "\n length of hex string: ", len(hex_string))
-
-    # Assuming we get input in bit string format
-    if(len(bit_string) != 250):
-        raise ValueError("input string should be 250 bits long")
-
-    # logic for checking the parity bits and fixing errors in the transmission----------------------do i need to implement that----------------------
-
 
     #extract 234 bits from 250 bits
     decoded_string = bch226_250_decode(bit_string)
