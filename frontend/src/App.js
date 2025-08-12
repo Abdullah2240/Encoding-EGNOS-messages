@@ -28,9 +28,14 @@ function App() {
             });
 
             if (!res.ok) {
+<<<<<<< HEAD
                 // Extract the error response from the body and throw it
                 const errorData = await res.json();
                 throw new Error(errorData.message || 'Something went wrong');
+=======
+                const errorData = await res.json();
+                throw new Error(errorData["error"]);
+>>>>>>> 3795178bca45dbf9541ad0d597fa8ae4889c2f8f
             }
 
             const data = await res.json();
@@ -43,13 +48,15 @@ function App() {
             setHexString(data.hex_string);
             setReceivedPRNs(data.received_PRNs);
 
-            // Optionally, set some success message or additional feedback
+            // Clear any existing error
             setError('');
-        } catch (error) {
+        } 
+        catch (error) {
             console.error('Error:', error);
             setError('Error: ' + error.message);
         }
     };
+
 
     return (
         <div className="container d-flex justify-content-center align-items-center min-vh-100">
