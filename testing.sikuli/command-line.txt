@@ -1,0 +1,1 @@
+java -jar "C:\Users\satcom\Desktop\sikulixide-2.0.5.jar" -r "C:\Users\satcom\Desktop\Message Encoding\fullstack-website\testing.sikuli" --args 1 C6
