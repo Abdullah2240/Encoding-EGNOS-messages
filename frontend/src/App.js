@@ -2,13 +2,18 @@ import React, { useState } from 'react';
 
 function App() {
     const [input, setInput] = useState('');
+    const [iodp, setIodp] = useState('');
     const [bitString, setBitString] = useState('');
     const [hexString, setHexString] = useState('');
     const [receivedPRNs, setReceivedPRNs] = useState([]);
     const [error, setError] = useState('');
 
-    const handleChange = (event) => {
+    const handleInputChange = (event) => {
         setInput(event.target.value);
+    };
+
+    const handleIodpChange = (event) => {
+        setIodp(event.target.value);
     };
 
     const handleSubmit = async (event) => {
@@ -23,8 +28,9 @@ function App() {
             });
 
             if (!res.ok) {
+                // Extract the error response from the body and throw it
                 const errorData = await res.json();
-                throw new Error(errorData["error"]);
+                throw new Error(errorData.message || 'Something went wrong');
             }
 
             const data = await res.json();
@@ -56,7 +62,14 @@ function App() {
                         <input
                             type="text"
                             value={input}
-                            onChange={handleChange}
+                            onChange={handleInputChange}
+                            className="form-control"
+                            placeholder="Enter numbers (1-210) separated by commas"
+                        />
+                        <input
+                            type="text"
+                            value={iodp}
+                            onChange={handleIodpChange}
                             className="form-control"
                             placeholder="Enter numbers (1-210) separated by commas"
                         />
