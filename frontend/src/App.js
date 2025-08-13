@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 function App() {
     const [input, setInput] = useState('');
     const [bitString, setBitString] = useState('');
-    const [binaryString, setBinaryString] = useState('');
     const [hexString, setHexString] = useState('');
     const [receivedPRNs, setReceivedPRNs] = useState([]);
     const [error, setError] = useState('');
@@ -15,7 +14,7 @@ function App() {
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            const res = await fetch('http://localhost:5000/api/numbers', {
+            const res = await fetch('/api/numbers', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -35,7 +34,6 @@ function App() {
 
             // Set the individual pieces of the response to display them
             setBitString(data.bit_string);
-            setBinaryString(data.binary_string);
             setHexString(data.hex_string);
             setReceivedPRNs(data.received_PRNs);
 
@@ -67,37 +65,39 @@ function App() {
                 </form>
 
                 {/* Display Error */}
-                {error && <p className="mt-4 text-danger">{error}</p>}
+                {error ? <p className="mt-4 text-danger">{error}</p> : 
 
-                {/* Display the response data */}
-                {bitString && (
-                    <div className="mt-6">
-                        <h4 className="text-center">Bit String</h4>
-                        <div className="alert alert-secondary">
-                            <p className="text-break">{bitString}</p>
+                    <>
+                    {bitString && (
+                        <div className="mt-6">
+                            <h4 className="text-center">Bit String</h4>
+                            <div className="alert alert-secondary">
+                                <p className="text-break">{bitString}</p>
+                            </div>
                         </div>
-                    </div>
-                )}
-                {hexString && (
-                    <div className="mt-6">
-                        <h4 className="text-center">Hex String</h4>
-                        <div className="alert alert-secondary">
-                            <p className="text-break">{hexString}</p>
+                    )}
+                    {hexString && (
+                        <div className="mt-6">
+                            <h4 className="text-center">Hex String</h4>
+                            <div className="alert alert-secondary">
+                                <p className="text-break">{hexString}</p>
+                            </div>
                         </div>
-                    </div>
-                )}
-                {receivedPRNs.length > 0 && (
-                    <div className="mt-6">
-                        <h4 className="text-center">Received PRNs</h4>
-                        <ul className="list-group">
-                            {receivedPRNs.map((prn, index) => (
-                                <li key={index} className="list-group-item">
-                                    {prn}
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                )}
+                    )}
+                    {receivedPRNs.length > 0 && (
+                        <div className="mt-6">
+                            <h4 className="text-center">Received PRNs</h4>
+                            <ul className="list-group">
+                                {receivedPRNs.map((prn, index) => (
+                                    <li key={index} className="list-group-item">
+                                        {prn}
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
+                    </>
+                }   
             </div>
         </div>
     );
