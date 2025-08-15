@@ -5,9 +5,7 @@ CRC24_POLY = "1100001100100110011111011"  # binary form as per Qualcom computing
 
 #HELPER FUNCTIONSS
 def crc24_encode(data_bits: str) -> str:
-    print(len(data_bits))
     n = len(CRC24_POLY)
-    print("n:", n)
     dividend = data_bits + "0" * (n - 1)
 
     # Modulo-2 division
@@ -20,7 +18,6 @@ def crc24_encode(data_bits: str) -> str:
                                  for j in range(n)) +
                          remainder[i + n:])
     crc = remainder[-(n - 1):]
-    print("\n", len(crc))
     return data_bits + crc
 
 # returns true if no errors and returns false if there are errors 
@@ -39,13 +36,14 @@ def crc24_check(codeword_bits: str) -> bool:
 
 def binary_to_hex(binary_string):
     """
-    Converts a binary string to a hexadecimal string. Assumes the binary string is correctly padded to a multiple of 4 bits.
+    Converts a binary string to a hexadecimal string. 
+    Pads with zeros to make the length a multiple of 4 bits.
     """
-
-    # pads six zeroes to the end of hex to get 256 ---> 64
-    # Step 2: Use Python's built-in conversion for efficiency
-    binary_string = binary_string + "000000"
-    print(hex(int(binary_string, 2)))
-    hex_string = hex(int(binary_string, 2))[2:].upper()
+    # Pad with zeros to make length a multiple of 4
+    padding_length = (4 - (len(binary_string) % 4)) % 4
+    padded_binary = binary_string + "0" * padding_length
     
-    return hex_string
+    # Convert to hex
+    hex_string = hex(int(padded_binary, 2))[2:].upper()
+    
+    return hex_string + "0"

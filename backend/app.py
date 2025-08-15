@@ -1,8 +1,7 @@
-from flask import Flask, request, jsonify, send_from_directory
+from flask import Flask, request, jsonify, send_from_directory, Response
 import os
 from flask_cors import CORS
-from helper import crc24_encode, binary_to_hex, crc24_check
-from message_types import mt-1
+from message_types import mt1, mt2, mt3, mt4, mt5, mt6, mt7, mt9, mt10, mt12, mt17, mt18, mt24, mt25, mt26, mt27, mt28 
 
 # Paths
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -29,69 +28,154 @@ def serve_react(path):
         return send_from_directory(FRONTEND_BUILD_DIR, 'index.html')
 
 
+def _send_result(result):
+    # If message_types returned a Flask Response or (Response, status), pass through
+    if isinstance(result, Response):
+        return result
+    if isinstance(result, tuple) and len(result) >= 1 and isinstance(result[0], Response):
+        return result
+    # If a plain string (expected hex), wrap in JSON
+    if isinstance(result, str):
+        return jsonify({'hex_string': result})
+    # Unexpected
+    return jsonify({'error': 'Unexpected backend return type'}), 500
 
 # API Endpoint
-@app.route('/api/numbers', methods=['POST'])
-def process_numbers():
+@app.route('/api/numbers/1', methods=['POST'])
+def process_numbers_1():
     try:
-        # Parse and validate JSON input
-        req_data = request.get_json()
-        if not req_data or 'numbers' not in req_data:
-            return jsonify({'error': 'Missing "numbers" field.'}), 400
-
-        numbers_str = req_data['numbers']
-        try:
-            numbers = list(map(int, numbers_str.split(',')))
-        except ValueError:
-            return jsonify({'error': 'Invalid input. Please provide a comma-separated list of numbers.'}), 400
-
-        if len(numbers) > 51:
-            return jsonify({'error': 'Too many numbers. Max is 51.'}), 400
-        if any(num < 1 or num > 210 for num in numbers):
-            return jsonify({'error': 'Numbers must be between 1 and 210.'}), 400
-
-        # Prepare message
-        preamble = "10011010"
-        message_type1 = "000001"
-        data_bits = [0] * 212
-
-        for prn in numbers:
-            if 0 <= prn < 210:
-                data_bits[prn-1] = 1
-            else:
-                return jsonify({'error': f'PRN {prn} is out of range 0–2(09)'}), 400
-
-        non_coded_message = preamble + message_type1 + ''.join(map(str, data_bits))
-
-        # Encode message
-        coded_string = crc24_encode(non_coded_message)
-        bit_string = ''.join(map(str, coded_string))
-
-        if len(bit_string) != 250:
-            return jsonify({'error': 'Bit string should be 250 bits.'}), 500
-
-        hex_string = binary_to_hex(bit_string)
-
-        # CRC check
-        # if not crc24_check(bit_string):
-        #     return jsonify({'error': 'CRC check failed. Input may be corrupted.'}), 400
-
-        # # Decode message
-        # decoded_string = bit_string[:226]
-        # if decoded_string[:8] != preamble:
-        #     return jsonify({'error': 'Preamble mismatch. Likely fake input.'}), 400
-        # if decoded_string[8:14] != message_type1:
-        #     return jsonify({'error': 'Unknown message type. Expected type 1.'}), 400
-
-        # received_PRNs = [(idx+1) for idx, bit in enumerate(decoded_string[14:226]) if bit == "1"]
-
-        return jsonify({
-            'hex_string': hex_string,
-        })
+        return _send_result(mt1(request))
     except Exception as e:
         print(f"Server error: {str(e)}")
         return jsonify({'error': 'Internal server error.'}), 500
 
+@app.route('/api/numbers/2', methods=['POST'])
+def process_numbers_2():
+    try:
+        return _send_result(mt2(request))
+    except Exception as e:
+        print(f"Server error: {str(e)}")
+        return jsonify({'error': 'Internal server error.'}), 500
+    
+@app.route('/api/numbers/3', methods=['POST'])
+def process_numbers_3():
+    try:
+        return _send_result(mt3(request))
+    except Exception as e:
+        print(f"Server error: {str(e)}")
+        return jsonify({'error': 'Internal server error.'}), 500
+
+@app.route('/api/numbers/4', methods=['POST'])
+def process_numbers_4():
+    try:
+        return _send_result(mt4(request))
+    except Exception as e:
+        print(f"Server error: {str(e)}")
+        return jsonify({'error': 'Internal server error.'}), 500
+
+@app.route('/api/numbers/5', methods=['POST'])
+def process_numbers_5():
+    try:
+        return _send_result(mt5(request))
+    except Exception as e:
+        print(f"Server error: {str(e)}")
+        return jsonify({'error': 'Internal server error.'}), 500
+
+@app.route('/api/numbers/6', methods=['POST'])
+def process_numbers_6():
+    try:
+        return _send_result(mt6(request))
+    except Exception as e:
+        print(f"Server error: {str(e)}")
+        return jsonify({'error': 'Internal server error.'}), 500
+
+@app.route('/api/numbers/7', methods=['POST'])
+def process_numbers_7():
+    try:
+        return _send_result(mt7(request))
+    except Exception as e:
+        print(f"Server error: {str(e)}")
+        return jsonify({'error': 'Internal server error.'}), 500
+
+@app.route('/api/numbers/9', methods=['POST'])
+def process_numbers_9():
+    try:
+        return _send_result(mt9(request))
+    except Exception as e:
+        print(f"Server error: {str(e)}")
+        return jsonify({'error': 'Internal server error.'}), 500
+
+@app.route('/api/numbers/10', methods=['POST'])
+def process_numbers_10():
+    try:
+        return _send_result(mt10(request))
+    except Exception as e:
+        print(f"Server error: {str(e)}")
+        return jsonify({'error': 'Internal server error.'}), 500
+
+@app.route('/api/numbers/12', methods=['POST'])
+def process_numbers_12():
+    try:
+        return _send_result(mt12(request))
+    except Exception as e:
+        print(f"Server error: {str(e)}")
+        return jsonify({'error': 'Internal server error.'}), 500
+
+@app.route('/api/numbers/17', methods=['POST'])
+def process_numbers_17():
+    try:
+        return _send_result(mt17(request))
+    except Exception as e:
+        print(f"Server error: {str(e)}")
+        return jsonify({'error': 'Internal server error.'}), 500
+
+@app.route('/api/numbers/18', methods=['POST'])
+def process_numbers_18():
+    try:
+        return _send_result(mt18(request))
+    except Exception as e:
+        print(f"Server error: {str(e)}")
+        return jsonify({'error': 'Internal server error.'}), 500
+
+@app.route('/api/numbers/24', methods=['POST'])
+def process_numbers_24():
+    try:
+        return _send_result(mt24(request))
+    except Exception as e:
+        print(f"Server error: {str(e)}")
+        return jsonify({'error': 'Internal server error.'}), 500
+
+@app.route('/api/numbers/25', methods=['POST'])
+def process_numbers_25():
+    try:
+        return _send_result(mt25(request))
+    except Exception as e:
+        print(f"Server error: {str(e)}")
+        return jsonify({'error': 'Internal server error.'}), 500
+
+@app.route('/api/numbers/26', methods=['POST'])
+def process_numbers_26():
+    try:
+        return _send_result(mt26(request))
+    except Exception as e:
+        print(f"Server error: {str(e)}")
+        return jsonify({'error': 'Internal server error.'}), 500
+
+@app.route('/api/numbers/27', methods=['POST'])
+def process_numbers_27():
+    try:
+        return _send_result(mt27(request))
+    except Exception as e:
+        print(f"Server error: {str(e)}")
+        return jsonify({'error': 'Internal server error.'}), 500
+
+@app.route('/api/numbers/28', methods=['POST'])
+def process_numbers_28():
+    try:
+        return _send_result(mt28(request))
+    except Exception as e:
+        print(f"Server error: {str(e)}")
+        return jsonify({'error': 'Internal server error.'}), 500
 
 # Run app
 if __name__ == '__main__':
