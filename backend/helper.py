@@ -42,11 +42,10 @@ def binary_to_hex(binary_string):
     Converts a binary string to a hexadecimal string. Assumes the binary string is correctly padded to a multiple of 4 bits.
     """
 
-    # binary_string += "00" + binary_string
+    # pads six zeroes to the end of hex to get 256 ---> 64
     # Step 2: Use Python's built-in conversion for efficiency
+    binary_string = binary_string + "000000"
     print(hex(int(binary_string, 2)))
     hex_string = hex(int(binary_string, 2))[2:].upper()
     
-    hex_string = hex_string + "0"
-
     return hex_string

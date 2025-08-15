@@ -9,6 +9,9 @@ from sikuli import *
 # CONFIG - Replace with your image paths
 # -------------------------
 
+# ENCODE
+encode = "/sbas-ss/encode.jpg"
+
 # Message Type Buttons
 MT_1 = "/sbas-ss/message_types/1.png"
 MT_2 = "/sbas-ss/message_types/2.png"
@@ -37,12 +40,12 @@ PREAMBLE_C6 = "/sbas-ss/preambles/C6.png"
 IODP = "/sbas-ss/iodps/iodp.png"
 
 
-IMG_MAIN_RADIO1 = "C:/sbas_images/main_radio1.png"
-IMG_MAIN_RADIO2 = "C:/sbas_images/main_radio2.png"
-IMG_NEXT_BTN = "C:/sbas_images/next_button.png"
+#MT-1
+sample = "/sbas-ss/mt-1/21.jpg"
 
-IMG_P1_RADIO1 = "C:/sbas_images/page1_radio1.png"
-IMG_P1_RADIO2 = "C:/sbas_images/page1_radio2.png"
+
+# write the same till 210
+
 
 IMG_P2_SLIDER1 = "C:/sbas_images/page2_slider1.png"
 IMG_P2_SLIDER2 = "C:/sbas_images/page2_slider2.png"
@@ -59,10 +62,10 @@ def click_IODP(num):
     y = iodp_region.y
 
     # Define locations relative to top-left corner of the found image
-    IODP_0 = Location(x + 20, y + 15)
-    IODP_1 = Location(x + 60, y + 15)
-    IODP_2 = Location(x + 100, y + 15)
-    IODP_3 = Location(x + 140, y + 15)
+    IODP_0 = Location(x + 25, y + 40)
+    IODP_1 = Location(x + 70, y + 40)
+    IODP_2 = Location(x + 115, y + 40)
+    IODP_3 = Location(x + 160, y + 40)
 
     if(num == 0):
         click(IODP_0)   
@@ -75,7 +78,7 @@ def click_IODP(num):
 
 def click_if_exists(img, timeout=1):
     """Click the image if found within timeout"""
-    if exists(Pattern(img).similar(0.8), timeout):
+    if exists(Pattern(img).similar(0.7), timeout):
         click(img)
     else:
         print("Could not find:", img)
@@ -98,20 +101,11 @@ def scroll_section(scrollbar_img, scrollbar_end_img):
 def automate_sbas_teacher():
     # Make sure SBAS Teacher is on screen
     App.focus("SBAS Teacher")  # App name must match window title
-    
-    print(sys.argv)  # See exactly what’s being passed
-
-    if len(sys.argv) > 2:
-        if sys.argv[2] == 1:
-            print("Second argument is 1")
-    else:
-        print("Not enough arguments")
 
     # ===== MAIN PAGE =====
     click_if_exists(MT_1)
 
     # ===== PAGE 1 =====
-    print("arg[2]", sys.argv[2])
     if sys.argv[1] == u'1':
         if sys.argv[2] == u'53':
             click_if_exists(PREAMBLE_53)
@@ -120,6 +114,21 @@ def automate_sbas_teacher():
             click_if_exists(PREAMBLE_9A)    
         elif sys.argv[2] == "C6":
             click_if_exists(PREAMBLE_C6)
+
+    if sys.argv[3] == u'0':
+        click_IODP(0)  # Click IODP 0
+    elif sys.argv[3] == u'1':
+        click_IODP(1)
+    elif sys.argv[3] == u'2':
+        click_IODP(2)
+    elif sys.argv[3] == u'3':
+        click_IODP(3)
+    
+
+    click_if_exists(sample)
+
+    click_if_exists(encode)
+
 
     # ===== PAGE 2 =====
     if sys.argv[2] == "2":
