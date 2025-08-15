@@ -1,117 +1,45 @@
-import React, { useState } from 'react';
+// App.js
+import React from "react";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import InputForm from "./components/InputForm"; // Option 1 (dynamic single component)
+// OR import InputForm1, InputForm2, ... if using Option 2
 
-function App() {
-    const [input, setInput] = useState('');
-    const [iodp, setIodp] = useState('');
-    const [bitString, setBitString] = useState('');
-    const [hexString, setHexString] = useState('');
-    const [receivedPRNs, setReceivedPRNs] = useState([]);
-    const [error, setError] = useState('');
+function Home() {
+  const buttonIds = [1, 2, 3, 4, 5, 6, 7, 9, 10, 12, 17, 18, 24, 25, 26, 27, 28];
 
-    const handleInputChange = (event) => {
-        setInput(event.target.value);
-    };
-
-    const handleIodpChange = (event) => {
-        setIodp(event.target.value);
-    };
-
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        try {
-            const res = await fetch('/api/numbers', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ numbers: input }),
-            });
-
-            if (!res.ok) {
-                // Extract the error response from the body and throw it
-                const errorData = await res.json();
-                throw new Error(errorData.message || 'Something went wrong');
-            }
-
-            const data = await res.json();
-
-            // Log the full response data to the console
-            console.log(data);
-
-            // Set the individual pieces of the response to display them
-            setBitString(data.bit_string);
-            setHexString(data.hex_string);
-            setReceivedPRNs(data.received_PRNs);
-
-            // Clear any existing error
-            setError('');
-        } 
-        catch (error) {
-            console.error('Error:', error);
-            setError('Error: ' + error.message);
-        }
-    };
-
-
-    return (
-        <div className="container d-flex justify-content-center align-items-center min-vh-100">
-            <div className="card p-4 shadow-lg w-50">
-                <h1 className="text-center mb-4">Number Input</h1>
-                <form onSubmit={handleSubmit}>
-                    <div className="mb-3">
-                        <input
-                            type="text"
-                            value={input}
-                            onChange={handleInputChange}
-                            className="form-control"
-                            placeholder="Enter numbers (1-210) separated by commas"
-                        />
-                        <input
-                            type="text"
-                            value={iodp}
-                            onChange={handleIodpChange}
-                            className="form-control"
-                            placeholder="Enter numbers (1-210) separated by commas"
-                        />
-                    </div>
-                    <button type="submit" className="btn btn-primary w-100">Submit</button>
-                </form>
-
-                {/* Display Error */}
-                {error && <p className="mt-4 text-danger">{error}</p>}
-
-                {/* Display the response data */}
-                {bitString && (
-                    <div className="mt-6">
-                        <h4 className="text-center">Bit String</h4>
-                        <div className="alert alert-secondary">
-                            <p className="text-break">{bitString}</p>
-                        </div>
-                    </div>
-                )}
-                {hexString && (
-                    <div className="mt-6">
-                        <h4 className="text-center">Hex String</h4>
-                        <div className="alert alert-secondary">
-                            <p className="text-break">{hexString}</p>
-                        </div>
-                    </div>
-                )}
-                {receivedPRNs.length > 0 && (
-                    <div className="mt-6">
-                        <h4 className="text-center">Received PRNs</h4>
-                        <ul className="list-group">
-                            {receivedPRNs.map((prn, index) => (
-                                <li key={index} className="list-group-item">
-                                    {prn}
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                )}
-            </div>
+  return (
+    <div className="container d-flex justify-content-center align-items-center min-vh-100">
+      <div className="card p-4 shadow-lg w-75">
+        <h1 className="text-center mb-4">Message Type Selector</h1>
+        <div className="d-grid gap-2">
+          {buttonIds.map((id) => (
+            <Link
+              key={id}
+              to={`/input/${id}`}
+              className="btn btn-primary"
+            >
+              Message Type {id}
+            </Link>
+          ))}
         </div>
-    );
+      </div>
+    </div>
+  );
 }
 
-export default App;
+export default function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        {/* If using Option 1 (dynamic InputForm) */}
+        <Route path="/input/:id" element={<InputForm />} />
+
+        {/* If using Option 2 (separate components), replace above with: */}
+        {/* <Route path="/input/1" element={<InputForm1 />} /> */}
+        {/* <Route path="/input/2" element={<InputForm2 />} /> */}
+        {/* ... up to 28 */}
+      </Routes>
+    </Router>
+  );
+}
