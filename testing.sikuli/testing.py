@@ -73,7 +73,7 @@ def click_IODP(num):
     elif(num == 3):
         click(IODP_3)
 
-def click_if_exists(img, timeout=1):
+def click_if_exists(img, timeout=0):
     """Click the image if found within timeout"""
     if exists(Pattern(img).similar(0.8), timeout):
         click(img)
